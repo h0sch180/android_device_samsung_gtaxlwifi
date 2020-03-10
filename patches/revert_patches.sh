@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ../../../
 cd frameworks/base
 git reset --hard && git clean -fd
 cd ../../
