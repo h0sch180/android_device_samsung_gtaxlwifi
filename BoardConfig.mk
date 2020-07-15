@@ -16,6 +16,9 @@
 
 LOCAL_PATH := device/samsung/gtaxlwifi
 
+# temporary
+BUILD_BROKEN_DUP_RULES := true
+
 # Include path
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
@@ -51,7 +54,7 @@ TARGET_USES_64_BIT_BINDER := true
 # Kernel
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -89,6 +92,10 @@ TARGET_USERIMAGES_USE_F2FS := true
 # Vendor separation
 TARGET_COPY_OUT_VENDOR := system/vendor
 
+# Audio
+USE_XML_AUDIO_POLICY_CONF := 1
+AUDIOSERVER_MULTILIB := 32
+
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
@@ -100,9 +107,6 @@ QCOM_BT_USE_SMD_TTY := true
 # Samsung HALs
 TARGET_AUDIOHAL_VARIANT := samsung
 TARGET_POWERHAL_VARIANT := samsung
-
-# Lineage HW
-JAVA_SOURCE_OVERLAYS := org.lineageos.hardware|$(LOCAL_PATH)/lineagehw|**/*.java
 
 # Samsung Camera
 BOARD_USE_SAMSUNG_CAMERAFORMAT_NV21 := true
@@ -185,14 +189,14 @@ TARGET_OMX_LEGACY_RESCALING := true
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_WLAN_DEVICE                := qcwcn
 BOARD_HOSTAPD_DRIVER             := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-WIFI_DRIVER_FW_PATH_AP           := "ap"
-WIFI_DRIVER_FW_PATH_STA          := "sta"
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+#WIFI_DRIVER_FW_PATH_AP           := "ap"
+#WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_P2P          := "p2p"
 WIFI_DRIVER_MODULE_NAME          := wlan
-WIFI_DRIVER_MODULE_PATH          := /system/vendor/lib/modules/wlan.ko
+WIFI_DRIVER_MODULE_PATH          := $(TARGET_COPY_OUT_VENDOR)/lib/modules/wlan.ko
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 WPA_SUPPLICANT_USE_HIDL          := true
 
@@ -208,8 +212,15 @@ CHARGING_ENABLED_PATH := /sys/class/power_supply/battery/batt_lp_charging
 # RIL
 BOARD_VENDOR := samsung
 
+# HIDL
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(LOCAL_PATH)/compatibility_matrix.xml
+
 # Release tools
 TARGET_RELEASETOOLS_EXTENSIONS := $(LOCAL_PATH)
+
+# Ramdisk
+BOARD_ROOT_EXTRA_FOLDERS := efs
 
 # Recovery
 #RECOVERY_VARIANT := twrp
@@ -243,7 +254,7 @@ TARGET_LD_SHIM_LIBS += \
 
 # Shims: gps
 TARGET_LD_SHIM_LIBS += \
-    /system/bin/gpsd|gpsd_shim.so
+    /vendor/bin/hw/gpsd|gpsd_shim.so
 
 # Security patch level - T580XXU4CRK5
 VENDOR_SECURITY_PATCH := 2018-11-01

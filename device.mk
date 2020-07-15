@@ -32,10 +32,6 @@ TARGET_SCREEN_HEIGHT := 1920
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 
-# Flat device tree for boot image
-#PRODUCT_PACKAGES += \
-#    dtbhtoolExynos
-
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.samsungexynos7870 \
@@ -84,14 +80,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.composer@2.2-service \
+    android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.mapper@2.0-impl-2.1 \
     android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service \
     android.hardware.renderscript@1.0-impl \
-    gralloc.exynos5 \
-    libhwc2on1adapter \
-    memtrack.exynos5
+    libhwc2on1adapter
 
 PRODUCT_PACKAGES += \
     libtinyxml
@@ -115,6 +108,10 @@ PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service
 
+# Cas
+PRODUCT_PACKAGES += \
+    android.hardware.cas@1.1-service
+
 # Doze
 PRODUCT_PACKAGES += \
     SamsungDoze
@@ -122,6 +119,10 @@ PRODUCT_PACKAGES += \
 # Touch features
 PRODUCT_PACKAGES += \
     vendor.lineage.touch@1.0-service.samsung
+
+# LiveDisplay
+PRODUCT_PACKAGES += \
+    vendor.lineage.livedisplay@2.0-service.samsung-exynos
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -151,12 +152,6 @@ PRODUCT_PACKAGES += \
     libxml2 \
     libprotobuf-cpp-full
 
-# IPv6
-PRODUCT_PACKAGES += \
-    ebtables \
-    ethertypes \
-    libebtc
-
 # Net
 PRODUCT_PACKAGES += \
     android.system.net.netd@1.0 \
@@ -179,10 +174,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
-# Custom wifi service
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/init/android.hardware.wifi@1.0-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi@1.0-service.rc
-
 PRODUCT_PACKAGES += \
     hostapd \
     libqsap_sdk \
@@ -199,20 +190,41 @@ PRODUCT_PACKAGES += \
     libbt-vendor
 
 # Audio
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/configs/audio/mixer_gains.xml:system/etc/mixer_gains.xml \
-    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
-    $(LOCAL_PATH)/configs/audio/mixer_paths_rev00.xml:system/etc/mixer_paths_rev00.xml
-
 PRODUCT_PACKAGES += \
-    audio.primary.universal7870 \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio@2.0-service \
+    android.hardware.audio@5.0-impl \
+    android.hardware.audio.common@5.0 \
+    android.hardware.audio.common@5.0-util \
+    android.hardware.audio.effect@2.0-impl \
+    android.hardware.audio.effect@5.0 \
+    android.hardware.audio.effect@5.0-impl \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
     libtinycompress \
-    android.hardware.audio@2.0-impl \
-    android.hardware.audio.effect@2.0-impl
+
+#PRODUCT_PACKAGES += \
+#    audio.primary.universal7870_32
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/audio_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy.conf \
+#    $(LOCAL_PATH)/configs/audio/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml \
+    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(LOCAL_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
+    frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -227,13 +239,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl
 
-# HIDL
-PRODUCT_PACKAGES += \
-    android.hidl.base@1.0 \
-    android.hidl.base@1.0_system \
-    android.hidl.manager@1.0 \
-    android.hidl.manager@1.0_system
-
 # GPS
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps/gps.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/gps.cfg \
@@ -247,8 +252,8 @@ PRODUCT_PACKAGES += \
 
 # Keys
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/keylayout/gpio-keys.kl:/$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/configs/keylayout/sec_touchscreen.kl:/$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/sec_touchscreen.kl
+    $(LOCAL_PATH)/configs/keylayout/gpio-keys.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/gpio-keys.kl \
+    $(LOCAL_PATH)/configs/keylayout/sec_touchscreen.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/sec_touchscreen.kl
 
 # Configstore
 PRODUCT_PACKAGES += \
@@ -260,20 +265,14 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/idc/qwerty.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/qwerty.idc \
     $(LOCAL_PATH)/configs/idc/qwerty2.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/qwerty2.idc
 
-# Manifest
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/manifest.xml:$(TARGET_COPY_OUT_VENDOR)/manifest.xml
-
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-impl \
-    android.hardware.power@1.0-service \
-    power.universal7870
+    android.hardware.power@1.0-service.exynos \
+    android.hardware.power.stats@1.0-service.mock
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-impl \
-    lights.universal7870
+    android.hardware.light@2.0-service.samsung
 
 # Sensors
 PRODUCT_PACKAGES += \
@@ -292,10 +291,6 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     persist.sys.usb.config=adb \
     ro.adb.secure=0 \
     ro.secure=0
-
-# Root
-PRODUCT_PACKAGES += \
-    su
 
 # Offmode charger
 PRODUCT_PACKAGES += \
