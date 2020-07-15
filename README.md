@@ -1,6 +1,6 @@
 Device configuration for the Samsung Galaxy Tab A
 
-Copyright (C) 2017 The LineageOS Project
+Copyright (C) 2017 The LineageOS Project\
 Copyright (C) 2017 Valera Chigir <valera1978@tut.by>
 
 
