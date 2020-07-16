@@ -22,6 +22,12 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
+PRODUCT_PROPERTY_OVERRIDES := \
+    ro.carrier=wifi-only
+
+# Properties
+-include $(LOCAL_PATH)/system_prop.mk
+
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := hdpi
@@ -32,10 +38,14 @@ TARGET_SCREEN_HEIGHT := 1920
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 
+# first_stage_mount
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/fstab.samsungexynos7870:$(TARGET_COPY_OUT_RAMDISK)/fstab.samsungexynos7870 \
+    $(LOCAL_PATH)/rootdir/fstab.samsungexynos7870:$(TARGET_COPY_OUT_VENDOR)/fstab.samsungexynos7870
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.samsungexynos7870 \
-    init.rilcommon.rc \
     init.power.rc \
     init.samsung.rc \
     init.samsungexynos7870.rc \
@@ -45,11 +55,7 @@ PRODUCT_PACKAGES += \
 
 # cpboot-daemon
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/cbd:$(TARGET_COPY_OUT_VENDOR)/bin/cbd
-
-# sswap
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ramdisk/sswap:$(TARGET_COPY_OUT_VENDOR)/bin/sswap
+    $(LOCAL_PATH)/rootdir/cbd:$(TARGET_COPY_OUT_VENDOR)/bin/cbd
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -80,11 +86,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.composer@2.2-service \
     android.hardware.graphics.mapper@2.0-impl-2.1 \
     android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service \
     android.hardware.renderscript@1.0-impl \
-    libhwc2on1adapter
+    gralloc.exynos5 \
+    libhwc2on1adapter \
+    memtrack.exynos5
 
 PRODUCT_PACKAGES += \
     libtinyxml
@@ -100,29 +109,20 @@ PRODUCT_COPY_FILES += \
 
 # DRM
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service
+    android.hardware.drm@1.0-impl
 
 # Keymaster
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service
+    android.hardware.keymaster@4.0-impl \
+    android.hardware.keymaster@4.0-service
 
 # Cas
 PRODUCT_PACKAGES += \
     android.hardware.cas@1.1-service
 
-# Doze
-PRODUCT_PACKAGES += \
-    SamsungDoze
-
 # Touch features
 PRODUCT_PACKAGES += \
     vendor.lineage.touch@1.0-service.samsung
-
-# LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service.samsung-exynos
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -140,9 +140,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     libexynoscamera_shim
-
-#PRODUCT_PACKAGES += \
-#    Snap
 
 # TextClassifier
 PRODUCT_PACKAGES += \
@@ -204,16 +201,12 @@ PRODUCT_PACKAGES += \
     audio.r_submix.default \
     libtinycompress \
 
-#PRODUCT_PACKAGES += \
-#    audio.primary.universal7870_32
+PRODUCT_PACKAGES += \
+    audio.primary.universal7870_32
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy.conf \
-#    $(LOCAL_PATH)/configs/audio/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml \
-    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+    $(LOCAL_PATH)/configs/audio/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
@@ -265,10 +258,14 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/idc/qwerty.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/qwerty.idc \
     $(LOCAL_PATH)/configs/idc/qwerty2.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/qwerty2.idc
 
+# MIDI support
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
+
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.0-service.exynos \
-    android.hardware.power.stats@1.0-service.mock
+    android.hardware.power.stats@1.0-service.mock \
+    android.hardware.power@1.0-service.exynos
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -276,7 +273,7 @@ PRODUCT_PACKAGES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    android.hardware.sensors@1.0-impl
+    android.hardware.sensors@1.0-impl.samsung
 
 # Trust HAL
 PRODUCT_PACKAGES += \
@@ -286,13 +283,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
 
-# ADB
+# ADB and USB configuration
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    persist.sys.usb.config=adb \
-    ro.adb.secure=0 \
-    ro.secure=0
+    persist.sys.usb.config=none \
+    ro.adb.secure=1 \
+    ro.secure=1
 
-# Offmode charger
+# Offline charging
 PRODUCT_PACKAGES += \
     charger_res_images \
     lineage_charger_res_images
