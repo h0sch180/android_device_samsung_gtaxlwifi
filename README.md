@@ -34,11 +34,11 @@ repo init -u git://github.com/LineageOS/android.git -b lineage-17.1
 <manifest>
 
   <project name="h0sch180/android_device_samsung_gtaxlwifi" path="device/samsung/gtaxlwifi" revision="lineage-17.1" remote="github" />
-  <project name="Valera1978/android_kernel_samsung_exynos7870" path="kernel/samsung/exynos7870" remote="github" />
+<!--  <project name="Valera1978/android_kernel_samsung_exynos7870" path="kernel/samsung/exynos7870" remote="github" /> -->
   <project name="h0sch180/android_vendor_samsung_gtaxlwifi" path="vendor/samsung/gtaxlwifi" revision="lineage-17.1" remote="github" />
 
-  <project name="Valera1978/android_hardware_samsung" path="hardware/samsung" revision="lineage-17.0" remote="github" />
-  <project name="LineageOS/android_packages_resources_devicesettings" path="packages/resources/devicesettings" remote="github" />
+  <project name="TALUAtGitHub/android_kernel_samsung_exynos7870" path="kernel/samsung/exynos7870" remote="github" revision="lineage-17.1" />
+  <project name="TALUAtGitHub/android_hardware_samsung" path="hardware/samsung" remote="github" revision="lineage-17.1" />
 
 </manifest>
 ```
