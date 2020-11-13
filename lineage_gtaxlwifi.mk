@@ -29,18 +29,20 @@ PRODUCT_NAME := lineage_gtaxlwifi
 PRODUCT_DEVICE := gtaxlwifi
 PRODUCT_BRAND := samsung
 PRODUCT_MODEL := SM-T580
-PRODUCT_MANUFACTURER := samsung
+PRODUCT_MANUFACTURER := Samsung
 
 PRODUCT_GMS_CLIENTID_BASE := android-samsung
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     TARGET_DEVICE="gtaxlwifi" \
     PRODUCT_NAME="gtaxlwifi" \
-    PRIVATE_BUILD_DESC="gtaxlwifixx-user 8.1.0 M1AJQ T580XXS5CTD1 release-keys"
-#    PRIVATE_BUILD_DESC="gtaxlwifixx-user 8.1.0 M1AJQ T580XXU4CRK5 release-keys"
+    PRIVATE_BUILD_DESC="gtaxlwifixx-user 8.1.0 M1AJQ T580XXU4CSA1 release-keys"
+
+# Device Maintainer
+PRODUCT_PROPERTY_OVERRIDES += \
+	ro.lineage.maintainer=h0sch180
 
 # Set BUILD_FINGERPRINT variable to be picked up by both system and vendor build.prop
-#BUILD_FINGERPRINT := Xiaomi/sagit/sagit:7.1.1/NMF26X/V8.2.17.0.NCACNEC:user/release-keys
-BUILD_FINGERPRINT := samsung/gtaxlwifixx/gtaxlwifi:8.1.0/M1AJQ/T580XXS5CTD1:user/release-keys
+BUILD_FINGERPRINT := Xiaomi/sagit/sagit:7.1.1/NMF26X/V8.2.17.0.NCACNEC:user/release-keys
 
 TARGET_VENDOR := Samsung
