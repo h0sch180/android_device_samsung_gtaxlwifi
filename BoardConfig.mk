@@ -26,6 +26,9 @@ TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 
+# ADB Legacy Interface
+TARGET_USES_LEGACY_ADB_INTERFACE := true
+
 # Platform
 TARGET_BOARD_PLATFORM := exynos5
 TARGET_SLSI_VARIANT := bsp
@@ -50,7 +53,7 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a53
 # Kernel
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_CLANG_COMPILE := true
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -254,12 +257,12 @@ TARGET_LD_SHIM_LIBS += \
     /vendor/bin/hw/gpsd|gpsd_shim.so
 
 # Security patch level - T580XXU4CRK5
-VENDOR_SECURITY_PATCH := 2018-11-01
+VENDOR_SECURITY_PATCH := 2020-04-01
 
 SELINUX_IGNORE_NEVERALLOWS := true
 
 # SELinux
-BOARD_VENDOR_SEPOLICY_DIRS := $(LOCAL_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS := $(LOCAL_PATH)/sepolicy
 
 # Inherit from the proprietary version
 -include vendor/samsung/gtaxlwifi/BoardConfigVendor.mk
